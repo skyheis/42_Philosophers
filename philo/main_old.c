@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 13:59:00 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/01 12:11:52 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void *ft_free(void **point)
 	return (NULL);
 }
 
-/*void *ft_free_philo(t_phil **philo)
+void *ft_free_philo(t_phil **philo)
 {
 	int	i;
 
@@ -126,120 +126,18 @@ t_phil	*ft_init_philo(int ac, char **av)
 	while (i < philo->n_phil)
 		pthread_mutex_init(&philo->fork[i++], NULL); //parentesi?
 	return (philo);
-}*/
-
-void	printph(t_phil *philo, int action)
-{
-	int time = 42;
-
-	pthread_mutex_lock(&philo->meta->print);
-	if (philo->meta->dead)
-	{
-		pthread_mutex_unlock(&(philo->meta->print));
-		return ;
-	}
-	if (action == FORK)
-		printf("%-7i %2i has taken a fork 🍴\n", time, philo->phid + 1);
-	else if (action == EAT)
-		printf("%-7i %2i is eating 🍝\n", time, philo->phid + 1);
-	else if (action == SLEEP)
-		printf("%-7i %2i is sleeping 💤\n", time, philo->phid + 1);
-	else if (action == THINK)
-		printf("%-7i %2i is thinking 💭\n", time, philo->phid + 1);
-	else if (action == DIE)
-	{
-		printf("%-7i %2i dead 💀\n", time, philo->phid + 1);
-		philo->meta->dead = 1;
-	}
-	pthread_mutex_unlock(&(philo->meta->print));
-}
-
-/* routine should be:
- *
- * lock dead
- * enter a big loop
- *  unlock dead
- *  lock my fork (print)
- *  lock fork + 1 (print)
- *  eat (print)
- *  unlock fork + 1
- *  unlock my fork
- *  sleep and wait(print)
- *  think (print)
- *  lock dead
- * say bye
- */
-
-void	*rout_test(t_phil *philo)
-{
-	int i = 0;
-
-	while (i++ < 1000)
-	{
-		//pthread_mutex_lock(&philo->meta->test);
-		philo->meta->times[philo->phid] += 1;
-		//pthread_mutex_unlock(&philo->meta->test);
-	}
-	printph(philo, FORK);
-	return (NULL);
 }
 
 int	main(int ac, char **av)
 {
 	t_phil	*philo;
-	t_glob	*meta;
-	int		n_phil;
-	int		i = 0;
 
-	if (ac != 3)
-		return (42);
-	n_phil = ft_utoi(av[1]);
-	philo = (t_phil *) malloc(n_phil * sizeof(t_phil));
+	philo = ft_init_philo(ac, av);
 	if (!philo)
 		return (1);
-	meta = (t_glob *) malloc(sizeof(t_glob));
-	if (!meta)
-		return (2);
-	while (i < n_phil)
-	{
-		philo[i].phid = i;
-		philo[i].meta = meta;
-		i++;
-	}
-	meta->times = (int *) malloc(n_phil * sizeof(int));
-	if (!meta->times)
-		return (3);
-	i = -1;
-	while (++i < n_phil)
-		meta->times[i] = ft_utoi(av[2]);//5
-	meta->fork = NULL;
-	pthread_mutex_init(&meta->print, NULL);
-	
-	meta->dead = 0;
-	pthread_mutex_init(&meta->test, NULL);
-	/*meta->fork = (pthread_mutex_t *) malloc(n_phil * sizeof(pthread_mutex_t));
-	if (!meta->fork)
-		return (4);
-	i = -1;
-	while (++i < n_phil)
-		pthread_mutex_init(&meta->fork[i++], NULL);*/
-	i = -1;
-	meta->phth = (pthread_t *) malloc(n_phil * sizeof(pthread_t));
-	while (++i < n_phil)
-	{
-		pthread_create(&meta->phth[i], NULL, (void *) rout_test, &philo[i]);
-	}
-	i = -1;
-	while (++i < n_phil)
-	{
-		pthread_join(meta->phth[i], NULL);
-//		printf("n is %i\n", meta->times[i]);
-	}
-	pthread_mutex_destroy(&meta->print);
-	pthread_mutex_destroy(&meta->test);
-	ft_free((void *)&meta->phth);
-	ft_free((void *)&meta->times);
-	ft_free((void *)&philo);
-	ft_free((void *)&meta);
-	return (0);
+	printf("n_phil %i\n", (int) philo->n_phil);
+	printf("die    %u\n", philo->time_die);
+	printf("eat    %u\n", philo->time_eat);
+	printf("sleep  %u\n", philo->time_sleep);
+	printf("times  %i\n", philo->times);
 }

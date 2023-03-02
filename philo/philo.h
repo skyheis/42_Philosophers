@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:02:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 11:06:53 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:29:41 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 
 typedef struct s_phil
 {
+	time_t			start_time;
 	unsigned int	phid;
 	struct s_glob	*meta;
 }					t_phil;
@@ -56,8 +57,17 @@ typedef struct s_glob
 	int				*times;
 }					t_glob;*/
 
+/* printph  */
+void	print_fork(t_phil *philo);
+void	print_eat(t_phil *philo);
+void	print_sleeping(t_phil *philo);
+void	print_die(t_phil *philo);
 
-
+/* utils_n_checks */
+int		ft_utoi(const char *num);
+int		ft_check_args(int ac, char **av);
+void	*ft_free(void **point);
+time_t	get_time(void);
 
 #endif
 

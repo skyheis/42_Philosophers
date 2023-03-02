@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:12:38 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/01 12:13:48 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:26:30 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void *ft_free(void **point)
 	return (NULL);
 }
 
-void *ft_free_philo(t_phil **philo)
+/*void *ft_free_philo(t_phil **philo)
 {
 	int	i;
 
@@ -35,7 +35,7 @@ void *ft_free_philo(t_phil **philo)
 	ft_free((void *) (*philo)->phth);
 	ft_free((void *) philo);
 	return (NULL);
-}
+}*/
 
 int	ft_check_args(int ac, char **av)
 {
@@ -75,4 +75,12 @@ int	ft_utoi(const char *num)
 		k++;
 	}
 	return (toi);
+}
+
+time_t	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }

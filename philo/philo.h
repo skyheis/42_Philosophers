@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:02:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 16:29:41 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:02:13 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ typedef struct s_glob
 	int				n_times;
 	int				*times;
 }					t_glob;*/
+
+void *ft_free_philo(t_phil **philo, t_glob **meta, int n_phil);
 
 /* printph  */
 void	print_fork(t_phil *philo);

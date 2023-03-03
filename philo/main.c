@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 16:36:29 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/03 15:07:54 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,8 @@ void	*rout_test(t_phil *philo)
 	return (NULL);
 }
 
+
+
 int	main(int ac, char **av)
 {
 	t_phil	*philo;
@@ -133,12 +135,12 @@ int	main(int ac, char **av)
 
 	meta->dead = 0;
 	pthread_mutex_init(&meta->test, NULL);
-	/*meta->fork = (pthread_mutex_t *) malloc(n_phil * sizeof(pthread_mutex_t));
+	meta->fork = (pthread_mutex_t *) malloc(n_phil * sizeof(pthread_mutex_t));
 	if (!meta->fork)
 		return (4);
 	i = -1;
 	while (++i < n_phil)
-		pthread_mutex_init(&meta->fork[i++], NULL);*/
+		pthread_mutex_init(&meta->fork[i], NULL);
 	i = -1;
 	meta->phth = (pthread_t *) malloc(n_phil * sizeof(pthread_t));
 	while (++i < n_phil)
@@ -152,27 +154,27 @@ int	main(int ac, char **av)
 //		printf("n is %i\n", meta->times[i]);
 	}
 
-	// free all
-	pthread_mutex_destroy(&meta->print);
-	pthread_mutex_destroy(&meta->test);
-	ft_free((void *)meta->phth);
-	ft_free((void *)meta->times);
-	ft_free((void *)meta);
-	ft_free((void *)philo);
+	ft_free_philo(&philo, &meta, n_phil);
 	return (0);
 }
 
-/*void *ft_free_philo(t_phil **philo, t_glob **meta)
+void *ft_free_philo(t_phil **philo, t_glob **meta, int n_phil)
 {
 	int	i;
 
 	i = 0;
-	if ((*philo)->fork)
-		while (i < (*philo)->n_phil)
-			pthread_mutex_destroy(&((*philo)->fork[i++]));
-	ft_free((void *) (*philo)->fork);
-	ft_free((void *) (*philo)->fork);
-	ft_free((void *) (*philo)->phth);
-	ft_free((void *) philo);
+	if (*meta)
+	{
+		if ((*meta)->fork)
+			while (i < n_phil)
+				pthread_mutex_destroy(&((*meta)->fork[i++]));
+		pthread_mutex_destroy(&(*meta)->print);
+		pthread_mutex_destroy(&(*meta)->test);
+		ft_free((void *)&(*meta)->phth);
+		ft_free((void *)&(*meta)->fork);
+		ft_free((void *)&(*meta)->times);
+	}
+	ft_free((void *)meta);
+	ft_free((void *)philo);
 	return (NULL);
-}*/
+}

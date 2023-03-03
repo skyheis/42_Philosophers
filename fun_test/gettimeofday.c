@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 12:18:53 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 11:28:26 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/02 16:08:44 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ int main()
 	struct timeval pre;
 	struct timeval pos;
 
+	printf("size time_t %lu\n", sizeof(time_t));
+	printf("size time_t %lu\n", sizeof(long long int));
 	gettimeofday(&pre, NULL); 
 	printf("pre %lu %lu\n", pre.tv_sec, pre.tv_usec);
 	ft_foo(1);

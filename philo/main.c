@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/04 18:47:01 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/04 21:03:09 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,21 @@ void	*rout_test(t_phil *philo)
 	return (NULL);
 }
 
-
+void	monitor_death(t_glob *meta)
+{
+	int	i;
+	int	n_phil;
+	
+	i = -1;
+	n_phil = meta->n_phil;
+	while (++i < n_phil)
+	{
+		pthread_mutex_lock(&meta->print);
+		if (meta->last_meal[i] - meta->start_time > meta->time_die) //creare le var giuste
+			meta->dead = 1;
+		pthread_mutex_unlock(&meta->print);
+	}
+}
 
 int	main(int ac, char **av)
 {
@@ -128,9 +142,20 @@ int	main(int ac, char **av)
 	i = -1;
 	while (++i < n_phil)
 		meta->times[i] = ft_utoi(av[2]);//5
+	meta->last_meal = (time_t *) malloc(n_phil * sizeof(time_t));
+	if (!meta->last_meal)
+		return (3);
+	i = -1;
+	while (++i < n_phil)
+		meta->last_meal[i] = start_time;
+	meta->n_phil = n_phil;
+
+
+
 
 	meta->fork = NULL;
 	pthread_mutex_init(&meta->print, NULL);
+
 
 	meta->dead = 0;
 	pthread_mutex_init(&meta->test, NULL);

@@ -6,14 +6,13 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/03 15:07:54 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/04 18:47:01 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
 /*
-
 int	ft_init_struct(int ac, char **av, t_phil *philo)
 {
 	int	i;

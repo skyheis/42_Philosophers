@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:02:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/04 20:58:24 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/15 16:11:11 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_phil
 {
 	time_t			start_time;
 	unsigned int	phid;
+	unsigned int	next_fork;
 	unsigned int	time_eat;
 	unsigned int	time_sleep;
 	struct s_glob	*meta;
@@ -45,10 +46,12 @@ typedef struct s_phil
 
 typedef struct s_glob
 {
-	int				clock;
+	int				clock;//serve?
 	int				n_phil;
 	int				*times;
 	time_t			*last_meal;
+	time_t			start_time;
+	unsigned int	time_die;
 	pthread_t		*phth;
 	pthread_mutex_t	*fork;
 	int				dead;
@@ -75,7 +78,8 @@ void *ft_free_philo(t_phil **philo, t_glob **meta, int n_phil);
 void	print_fork(t_phil *philo);
 void	print_eat(t_phil *philo);
 void	print_sleeping(t_phil *philo);
-void	print_die(t_phil *philo);
+void	print_think(t_phil *philo);
+void	print_die(t_glob *meta, int i);
 
 /* utils_n_checks */
 int		ft_utoi(const char *num);

@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 15:51:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/15 16:10:52 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/16 09:55:51 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	print_think(t_phil *philo)
 	pthread_mutex_unlock(&(philo->meta->print));
 }
 
-void	print_die(t_glob *meta, int i)
+/*void	print_die(t_glob *meta, int i)
 {
 	pthread_mutex_lock(&meta->print);
 	if (!meta->dead)
@@ -57,4 +57,4 @@ void	print_die(t_glob *meta, int i)
 				get_time() - meta->start_time, i + 1);
 	}
 	pthread_mutex_unlock(&meta->print);
-}
+}*/

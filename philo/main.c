@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/15 16:51:50 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/16 14:40:07 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,72 +83,89 @@ void	ft_msleep(unsigned int x)
 	usleep(x * 1000);
 }
 
-void	*philo_life(t_phil *philo)
+void	philo_solo(t_phil *philo)
 {
+	pthread_mutex_lock(&philo->meta->print);
+	printf("%-7li %2i has taken a fork 🍴\n",
+			philo->start_time, philo->phid );
+	pthread_mutex_unlock(&philo->meta->print);
+}
+
+void	philo_life(t_phil *philo)
+{
+	int lol;
 	if (philo->phid % 2)
 		ft_msleep(15);
 	pthread_mutex_lock(&philo->meta->print);
-	while (!philo->meta->dead)
+	lol = philo->meta->dead;
+	pthread_mutex_unlock(&philo->meta->print);
+	//while (!philo->meta->dead)
+	while (!lol)
 	{
-		pthread_mutex_unlock(&philo->meta->print);
+		//pthread_mutex_unlock(&philo->meta->print);
 		pthread_mutex_lock(&philo->meta->fork[philo->phid]);
 		print_fork(philo);
 		pthread_mutex_lock(&philo->meta->fork[philo->next_fork]);
 		print_fork(philo);
 		print_eat(philo);
-		
 		pthread_mutex_lock(&philo->meta->print);
-		philo->meta->times[philo->phid] -= 1;
+		if (philo->meta->times[philo->phid] > 0)
+			philo->meta->times[philo->phid] -= 1;
 		philo->meta->last_meal[philo->phid] = get_time();
 		pthread_mutex_unlock(&philo->meta->print);
-		
 		ft_msleep(philo->time_eat);
-		pthread_mutex_unlock(&philo->meta->fork[philo->next_fork]);
 		pthread_mutex_unlock(&philo->meta->fork[philo->phid]);
+		pthread_mutex_unlock(&philo->meta->fork[philo->next_fork]);
 		print_sleeping(philo);
 		ft_msleep(philo->time_sleep);
 		print_think(philo);
 		pthread_mutex_lock(&philo->meta->print);
+		lol = philo->meta->dead;
+		pthread_mutex_unlock(&philo->meta->print);
 	}
-	return (NULL);
-}
-
-void	*rout_test(t_phil *philo)
-{
-	int i = 0;
-
-	while (i++ < 1000)
-	{
-		//pthread_mutex_lock(&philo->meta->test);
-		philo->meta->times[philo->phid] += 1;
-		//pthread_mutex_unlock(&philo->meta->test);
-	}
-	print_fork(philo);
-	return (NULL);
+	//pthread_mutex_unlock(&philo->meta->print);
 }
 
 void	monitor_death(t_glob *meta)
 {
 	int	i;
 	int	n_phil;
+	int all_ate;
 
 	n_phil = meta->n_phil;
+	all_ate = n_phil;
 	while (1)
 	{
 		i = -1;
+		ft_msleep(1);
 		while (++i < n_phil)
 		{
 			pthread_mutex_lock(&meta->print);
-			if (meta->last_meal[i] - meta->start_time > meta->time_die)
+			//if (meta->last_meal[i] - meta->start_time > meta->time_die + 100)
+			if (get_time() - meta->last_meal[i] >= meta->time_die)
 			{
+				//printf("i=%i lm=%lu\nst=%lu\ntd=%i\nres=%lu\n", i, meta->last_meal[i], meta->start_time, meta->time_die, meta->last_meal[i] - meta->start_time);
 				meta->dead = 1;
 				printf("%-7li %2i is dead 💀\n",
 					get_time() - meta->start_time, i + 1);
 				pthread_mutex_unlock(&meta->print);
 				return ;
 			}
+			else
+				pthread_mutex_unlock(&meta->print);
+			pthread_mutex_lock(&meta->print);
+			if (meta->times[i] == 0)
+				all_ate--;
 			pthread_mutex_unlock(&meta->print);
 		}
+		if (all_ate == 0)
+		{
+			pthread_mutex_lock(&meta->print);
+			meta->dead = 1;
+			pthread_mutex_unlock(&meta->print);
+			return ;
+		}
+		all_ate = n_phil;
 	}
 }
 
@@ -159,12 +176,13 @@ int	main(int ac, char **av)
 	pthread_t	monitor;
 	int		n_phil;
 	int		i = 0;
-//	time_t	start_time;
 
-	if (ac != 5)
+	if (ac < 5 || ac > 6)
 		return (42);
 
 	n_phil = ft_utoi(av[1]);
+	if (n_phil < 1)
+		return (printf("No philo no game 💀\n"));
 	philo = (t_phil *) malloc(n_phil * sizeof(t_phil));
 	if (!philo)
 		return (1);
@@ -209,7 +227,7 @@ int	main(int ac, char **av)
 
 //puo stare nell'init glob
 	pthread_mutex_init(&meta->print, NULL);
-	pthread_mutex_init(&meta->test, NULL);
+	//pthread_mutex_init(&meta->test, NULL);
 	//meta->fork = NULL;
 	meta->fork = (pthread_mutex_t *) malloc(n_phil * sizeof(pthread_mutex_t));
 	if (!meta->fork)
@@ -219,18 +237,25 @@ int	main(int ac, char **av)
 		pthread_mutex_init(&meta->fork[i], NULL);
 
 
-	i = -1;
 	meta->phth = (pthread_t *) malloc(n_phil * sizeof(pthread_t));
-	pthread_create(&monitor, NULL, (void *) monitor_death, &meta);
-	while (++i < n_phil)
+	pthread_create(&monitor, NULL, (void *) monitor_death, meta);
+	if (meta->n_phil == 1)
 	{
-		pthread_create(&meta->phth[i], NULL, (void *) philo_life, &philo[i]);
+		pthread_create(&meta->phth[0], NULL, (void *) print_fork, &philo[0]);
+		pthread_join(meta->phth[0], NULL);
 	}
-	i = -1;
-	while (++i < n_phil)
+	else
 	{
-		pthread_join(meta->phth[i], NULL);
-//		printf("n is %i\n", meta->times[i]);
+		i = -1;
+		while (++i < n_phil)
+		{
+			//usleep(10);
+			pthread_create(&meta->phth[i], NULL,
+					(void *) philo_life, &philo[i]);
+		}
+		i = -1;
+		while (++i < n_phil)
+			pthread_join(meta->phth[i], NULL);
 	}
 	pthread_join(monitor, NULL);
 	ft_free_philo(&philo, &meta, n_phil);
@@ -241,17 +266,18 @@ void *ft_free_philo(t_phil **philo, t_glob **meta, int n_phil)
 {
 	int	i;
 
-	i = 0;
 	if (*meta)
 	{
+		i = 0;
 		if ((*meta)->fork)
 			while (i < n_phil)
 				pthread_mutex_destroy(&((*meta)->fork[i++]));
 		pthread_mutex_destroy(&(*meta)->print);
-		pthread_mutex_destroy(&(*meta)->test);
+		//pthread_mutex_destroy(&(*meta)->test);
 		ft_free((void *)&(*meta)->phth);
 		ft_free((void *)&(*meta)->fork);
 		ft_free((void *)&(*meta)->times);
+		ft_free((void *)&(*meta)->last_meal);
 	}
 	ft_free((void *)meta);
 	ft_free((void *)philo);

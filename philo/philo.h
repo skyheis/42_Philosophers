@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:02:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/15 16:11:11 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/16 12:38:33 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ typedef struct s_glob
 	pthread_mutex_t	*fork;
 	int				dead;
 	pthread_mutex_t	print;
-	pthread_mutex_t	test;
 }					t_glob;
 
 /*typedef struct s_glob

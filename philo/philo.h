@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 14:02:18 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/16 12:38:33 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:43:32 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,11 @@
 # include <stdlib.h>
 # include <sys/time.h>
 
-# define FORK 1
-# define EAT 2
-# define SLEEP 3
-# define THINK 4
-# define DIE 5
-
-
-/* devo lavorare sul tempo, ad ora do un init time a tutti
- * poi devo lavorare sulla logica, i dispari devono partire 
- * a distanza di 1ms di differenza.
- * devo travare il modo di dire fare il check sul tempo */
-
-/* creare un monitor per vedere se uno muore? */
+# define PHIL 1
+# define DIE 2
+# define EAT 3
+# define SLEEP 4
+# define TIMES 5
 
 typedef struct s_phil
 {
@@ -58,20 +50,17 @@ typedef struct s_glob
 	pthread_mutex_t	print;
 }					t_glob;
 
-/*typedef struct s_glob
-{
-	int				n_phil;
-	pthread_t		*phth;
-	pthread_mutex_t	*fork;
-	unsigned int	time_die;
-	unsigned int	time_eat;
-	unsigned int	time_sleep;
-	//unsigned int	time_think;
-	int				n_times;
-	int				*times;
-}					t_glob;*/
+void	monitor_death(t_glob *meta);
+void	philo_life(t_phil *philo);
 
-void *ft_free_philo(t_phil **philo, t_glob **meta, int n_phil);
+/* init all */
+void	ft_start_dinner(t_glob *meta, t_phil *philo, int n_phil);
+int		ft_init_mutex(t_glob *meta, int n_phil);
+int		ft_init_meta_philo(t_glob *meta, t_phil *philo, int ac, char **av);
+
+
+int		ft_free_philo(t_phil **philo, t_glob **meta, int n_phil);
+void	ft_msleep(unsigned int x);
 
 /* printph  */
 void	print_fork(t_phil *philo);

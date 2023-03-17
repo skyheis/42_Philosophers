@@ -6,13 +6,13 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 12:12:38 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/02 16:26:30 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/17 08:58:02 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void *ft_free(void **point)
+void	*ft_free(void **point)
 {
 	if (*point)
 	{
@@ -22,20 +22,10 @@ void *ft_free(void **point)
 	return (NULL);
 }
 
-/*void *ft_free_philo(t_phil **philo)
+void	ft_msleep(unsigned int x)
 {
-	int	i;
-
-	i = 0;
-	if ((*philo)->fork)
-		while (i < (*philo)->n_phil)
-			pthread_mutex_destroy(&((*philo)->fork[i++]));
-	ft_free((void *) (*philo)->fork);
-	ft_free((void *) (*philo)->fork);
-	ft_free((void *) (*philo)->phth);
-	ft_free((void *) philo);
-	return (NULL);
-}*/
+	usleep(x * 1000);
+}
 
 int	ft_check_args(int ac, char **av)
 {

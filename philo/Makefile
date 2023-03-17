@@ -6,7 +6,7 @@
 #    By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/07 17:49:20 by ggiannit          #+#    #+#              #
-#    Updated: 2023/03/15 15:55:45 by ggiannit         ###   ########.fr        #
+#    Updated: 2023/03/17 09:46:30 by ggiannit         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ INCLUDE = include
 
 ###### VARIABLE ######
 
-SRCS = main.c printph.c utils_n_checks.c
+SRCS = main.c free_printph.c utils_n_checks.c init_all.c
 
 OBJS = ${SRCS:.c=.o}
 

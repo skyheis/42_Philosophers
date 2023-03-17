@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/17 09:46:01 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/17 09:48:42 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	philo_solo(t_phil *philo)
 {
 	pthread_mutex_lock(&philo->meta->print);
 	printf("%-7li %2i has taken a fork 🍴\n",
-			philo->start_time, philo->phid );
+		philo->start_time, philo->phid);
 	pthread_mutex_unlock(&philo->meta->print);
 }
 
@@ -73,7 +73,7 @@ void	monitor_death(t_glob *meta)
 {
 	int	i;
 	int	n_phil;
-	int all_ate;
+	int	all_ate;
 
 	n_phil = meta->n_phil;
 	all_ate = n_phil;
@@ -84,7 +84,7 @@ void	monitor_death(t_glob *meta)
 		while (++i < n_phil)
 		{
 			if (monitor_checks(meta, &all_ate, i))
-					return ;
+				return ;
 		}
 		if (all_ate == 0)
 		{

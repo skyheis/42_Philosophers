@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 13:31:30 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/17 09:48:42 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/21 16:29:48 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,12 @@ void	philo_life(t_phil *philo)
 		print_fork(philo);
 		pthread_mutex_lock(&philo->meta->fork[philo->next_fork]);
 		print_fork(philo);
-		print_eat(philo);
 		pthread_mutex_lock(&philo->meta->print);
 		if (philo->meta->times[philo->phid] > 0)
 			philo->meta->times[philo->phid] -= 1;
 		philo->meta->last_meal[philo->phid] = get_time();
 		pthread_mutex_unlock(&philo->meta->print);
+		print_eat(philo);
 		ft_msleep(philo->time_eat);
 		pthread_mutex_unlock(&philo->meta->fork[philo->phid]);
 		pthread_mutex_unlock(&philo->meta->fork[philo->next_fork]);

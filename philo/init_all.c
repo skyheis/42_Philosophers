@@ -6,7 +6,7 @@
 /*   By: ggiannit <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:09:15 by ggiannit          #+#    #+#             */
-/*   Updated: 2023/03/17 09:42:21 by ggiannit         ###   ########.fr       */
+/*   Updated: 2023/03/24 11:26:15 by ggiannit         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	ft_init_meta_philo(t_glob *meta, t_phil *philo, int ac, char **av)
 	while (i < n_phil)
 	{
 		philo[i].phid = i;
-		philo[i].next_fork = (i + 1);
+		philo[i].next_fork = (i + 1);// % n_phil;
 		philo[i].meta = meta;
 		philo[i].start_time = meta->start_time;
 		philo[i].time_eat = ft_utoi(av[EAT]);
